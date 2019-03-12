@@ -5,12 +5,15 @@ const expressGraphQL = require('express-graphql');
 
 // create an app const variable of express function
 const  app = express();
+const schema = require('./schema/schema');
 
 // tell The express.js to use the GraphQL middleware
-// Schema is madetory to pass alog with the Options Object
+// Schema is madetory to pass alog with the Options/Settings Object
 app.use('/graphql', expressGraphQL({
+    //passing the schema 
+    schema,
     // for the development use, (graphiql is a app designed by graphiql devs to roam throught data firing queris in browsers)
-    graphiql : true,
+    graphiql : true
     // 
 }))
 
