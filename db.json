@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "id": "11",
+      "firstName": "Tanesh Patel",
+      "age": 27,
+      "values": "true",
+      "companyId": "11"
+
+    },
+    {
+      "id": "22",
+      "firstName": "Sandeep Singh",
+      "age": 24,
+      "values": "false",
+      "companyId": "22"
+
+    },
+    {
+      "id": "244",
+      "firstName": "Rajin Nath",
+      "age": 25,
+      "values": "true",
+      "companyId": "22"
+    }
+  ],
+  "companies": [
+    {
+      "id": "11",
+      "name": "Vmoksha Technologies",
+      "address": "HSR Layout, 26th Main Road, Beside Sony Center"
+    },
+    {
+      "id": "22",
+      "name": "Tech Mahindra",
+      "address": "Electronic City, 2nd Phase"
+    },
+    {
+      "id": "32",
+      "name": "Campgamini",
+      "address": "Bannerghatta, 2nd Stage"
+    }
+  ]
+}
