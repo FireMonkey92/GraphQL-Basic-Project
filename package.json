@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "expressServer": "nodemon server.js",
     "jsonServer": "json-server --watch db.json --port 3004",
-    "dev": "concurrently \"npm run jsonServer\"  \" npm run expressServer \" "
+    "dev": "concurrently \"npm run jsonServer\"  \" npm run expressServer \"  \" sleepms 1000 && opener http://localhost:4000/graphql \"  "
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +18,11 @@
     "express-graphql": "^0.7.1",
     "graphql": "^14.1.1",
     "lodash": "^4.17.11",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "opener": "^1.5.1",
+    "sleep-ms": "^2.0.1"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1"
   }
 }

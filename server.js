@@ -1,4 +1,4 @@
-// import a express function
+// import an express function
 const express = require('express');
 // import expressGraphQL Middleware to proviode gluecode between our EXPRESSJS And GRAPHQL
 const expressGraphQL = require('express-graphql');
@@ -17,6 +17,7 @@ app.use('/graphql', expressGraphQL({
     graphiql : true
     
 }))
+
 
 app.set('port', process.env.PORT || 4000);
 // create a server running in port Specified localhost:4000
