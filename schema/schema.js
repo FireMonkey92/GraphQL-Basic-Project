@@ -5,17 +5,34 @@ const graphql = require("graphql");
 
 //axios is Promise based HTTP client for the browser and node.js
 const axios = require("axios");
+const API = "http://localhost:3004";
 
 // destructuring the Properties provieded by the graphql before using them
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLSchema,
+  GraphQLList
+} = graphql;
 
 const CompanyType = new GraphQLObjectType({
   name: "Company",
-  fields: {
+   // to avoid an error of defination 
+  fields: () => ({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
-    address: { type: GraphQLString }
-  }
+    address: { type: GraphQLString },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parentValue, args) {
+        return axios
+          .get(`${API}/companies/${parentValue.id}/users`)
+          .then(res => res.data)
+          .catch(err => console.log(err));
+      }
+    }
+  })
 });
 
 //   create a graphQLObjectType Of a presence of data  or User in our case.
@@ -25,19 +42,22 @@ const CompanyType = new GraphQLObjectType({
 //   fields:{}  ---> Defines the properties of the Object we wann create (in our case user's id, name, age and its Types)
 const UserType = new GraphQLObjectType({
   name: "User",
-  fields: {
+        // to avoid an error of defination 
+  fields: () => ({
     id: { type: GraphQLString },
     firstName: { type: GraphQLString },
     age: { type: GraphQLInt },
     values: { type: GraphQLString },
-    company : {
+    company: {
       type: CompanyType,
-      resolve(parentValue , args){
-        console.log(parentValue )
-        return axios.get(`http://localhost:3004/companies/${parentValue.companyId}`).then(res=>res.data);
+      resolve(parentValue, args) {
+        // console.log(parentValue )
+        return axios
+          .get(`${API}/companies/${parentValue.companyId}`)
+          .then(res => res.data);
       }
     }
-  }
+  })
 });
 
 // root queries
@@ -56,9 +76,21 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         //lodash function .find accepts two args frst data collaactiona nd , id using to find data within the collation and returning it
         return axios
-          .get(`http://localhost:3004/users/${args.id}`)
-          .then(res => res.data).catch(error=>console.log(error));
+          .get(`${API}/users/${args.id}`)
+          .then(res => res.data)
+          .catch(error => console.log(error));
         // as This axios returns data in the form of { data:{ firstname :"aa"} ..}
+      }
+    },
+    // Multiple root query
+    company: {
+      type: CompanyType,
+      args: { id: { type: GraphQLString } },
+      resolve(parentValue, args) {
+        return axios
+          .get(`${API}/companies/${args.id}`)
+          .then(res => res.data)
+          .catch(error => console.log(error));
       }
     }
   }
