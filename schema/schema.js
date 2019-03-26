@@ -13,12 +13,13 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } = graphql;
 
 const CompanyType = new GraphQLObjectType({
   name: "Company",
-   // to avoid an error of defination 
+  // to avoid an error of defination . or to implement circular relationship between types
   fields: () => ({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
@@ -42,12 +43,11 @@ const CompanyType = new GraphQLObjectType({
 //   fields:{}  ---> Defines the properties of the Object we wann create (in our case user's id, name, age and its Types)
 const UserType = new GraphQLObjectType({
   name: "User",
-        // to avoid an error of defination 
-  fields: () => ({
+  // to avoid an error of defination
+    fields: () => ({
     id: { type: GraphQLString },
     firstName: { type: GraphQLString },
     age: { type: GraphQLInt },
-    values: { type: GraphQLString },
     company: {
       type: CompanyType,
       resolve(parentValue, args) {
@@ -96,6 +96,30 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+// mutation defination
+const mutation = new GraphQLObjectType({
+      name: "Mutation",
+      fields: {
+        addUser: {
+          type: UserType, 
+          args: {
+            firstName : {type: new GraphQLNonNull(GraphQLString)},
+            age: {type : new GraphQLNonNull(GraphQLInt)},
+            companyID : {type : GraphQLString}
+          },
+          resolve(parentValue,{firstName,age, companyID}){
+                return axios.post(`${API}/users/`,{ firstName, age, companyID })
+                .then(res=> res.data).catch(err=>console.log(err))
+          }
+        }
+      }
+})
+
+
+
+
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation
 });
